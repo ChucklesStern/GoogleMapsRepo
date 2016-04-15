@@ -32,6 +32,11 @@ var ref = new Firebase("https://popping-inferno-8627.firebaseio.com/");
 var vm = this;
 vm.syncObject = $firebaseArray(ref);
 vm.Test = "Test"
+
+
+vm.customMarker = "../dist/images/home.png";
+
+
 vm.syncObject.$loaded().then(function(){
  console.log(vm.syncObject.length); 
 
@@ -68,6 +73,10 @@ for (var i = 0; i < shops.length; i++){
 var recordKey = shops.$keyAt(shops[i]);
 var recordActual = shops.$getRecord(recordKey);
 shops[recordKey].latLongArray = markerArray[i];
+
+if(shops[recordKey].address === ""){
+  shops[recordKey].address = "Delivery Only"
+}
 
 shops.$save(recordKey).then(function(ref){
   ref.key() === shops[recordKey].$id;
