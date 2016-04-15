@@ -9,8 +9,9 @@ vm.syncObject.$loaded().then(function(){
   NgMap.getMap().then(function(map) {
     console.log(map.getCenter());
     console.log('markers', map.markers);
+    map.customMarkers.customMarker.setVisible(true);
     console.log('shapes', map.shapes);
-
+google.maps.event.trigger(map, 'resize');
  //$scope.googleMapsUrl= googleMapsUrl; 
 
 

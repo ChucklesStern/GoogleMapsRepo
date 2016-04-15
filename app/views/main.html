@@ -1,14 +1,16 @@
 <div class="container" ng-app="newMapsApp" ng-controller="scopeController as vm" >
-  <h1>Map {{p.latLongArray}}</h1>
+  <h1>Map{{p.latLongArray}}</h1>
   <body>
- <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl}}">
+ <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{vm.googleMapsUrl}}">
 
-  <ng-map center="33,-117" zoom="10" map-type-id="MapTypeId.SATELLITE"><marker ng-repeat="p in vm.syncObject"
+  <ng-map center="35,-115" zoom="4" map-type-id="MapTypeId.SATELLITE"><marker  ng-repeat="p in vm.syncObject" icon="{path: 'CIRCLE', scale: 10}"
   position="{{p.latLongArray}}"
   data="{{syncObject[$index]}}"
-  on-click="showData()";
-  title="{{p.name}}"
-  ></ng-map>{{p.latLongArray}}
+  on-click="vm.showData()";
+  title="{{p.name}}
+  {{p.latLongArray}}"
+  ></marker>
+  </ng-map>{{p.latLongArray}}
   </div>
 
   </body>

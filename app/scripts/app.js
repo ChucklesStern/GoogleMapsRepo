@@ -31,14 +31,14 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', function ($s
 var ref = new Firebase("https://popping-inferno-8627.firebaseio.com/");
 var vm = this;
 vm.syncObject = $firebaseArray(ref);
-
+vm.Test = "Test"
 vm.syncObject.$loaded().then(function(){
  console.log(vm.syncObject.length); 
 
 
 
 
-    $scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqRfEpYBjnbhPJ9Bz5lD32LI5gJU0dlLc";
+    vm.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqRfEpYBjnbhPJ9Bz5lD32LI5gJU0dlLc";
 
 var pointArray = [];
 
@@ -84,6 +84,8 @@ console.log($scope.googleMapsUrl);
  console.log(vm.syncObject);
   console.log(latLongArray);
   console.log(markerArray)  
+
+
 
 });
   }]);

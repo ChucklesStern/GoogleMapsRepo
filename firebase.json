@@ -1,0 +1,9 @@
+{
+  "firebase": "popping-inferno-8627",
+  "public": "dist",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
