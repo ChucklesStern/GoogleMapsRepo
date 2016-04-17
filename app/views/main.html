@@ -14,11 +14,19 @@
   <br>
   <br>
   </div>
+  <form> 
+  <div class="form-group">
+    <div class="input-group">
+    <div class="input-group-addon"><i class ="fa fa-search"></i></div>
+    <input type="text" class="form-control" placeholder="search for dispensaries" ng-model="searchStates"></input>
+    </div>
+    </div>
+    </form>
   <table class="table table-bordered table-striped"><thead>
-    <tr><th>Name</th><th>Address</th><th>City</th><th>State</th><th>Zip</th><th>Delivery</th><th>Phone</th><tr>
+    <tr><th>Name</th><th>Address</th><th>City</th><th>State</th><th>Zip</th><th>Delivery</th><th>Phone</th></tr>
   </thead>
   <tbody>
-  <tr ng-repeat="shop in vm.syncObject">
+  <tr ng-repeat="shop in PaginatedList | orderBy: state | filter: searchStates">
   <td>{{shop.name}}</td>
   <td>{{shop.address}}</td>
   <td>{{shop.city}}</td>
@@ -26,6 +34,15 @@
   <td>{{shop.zip}}</td>
   <td>{{shop.delivery}}</td>
   <td>{{shop.Mobile}}</td>
-  </table>
+  </tr>
   </tbody>
+ </table> 
+     <uib-pagination
+ ng-model="currentPage"
+ total-items="totalItems"
+ max-size="maxSize"
+ boundary-links="true">
+ </uib-pagination>
+
+ 
 </div>

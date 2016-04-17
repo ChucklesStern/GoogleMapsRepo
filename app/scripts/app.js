@@ -50,6 +50,24 @@ var pointArray = [];
 var sampleShops;
 sampleShops = $scope.sampleShops;
 
+$scope.limit = 10;
+$scope.searchStates = '';
+ $scope.totalItems = vm.syncObject.length;
+ $scope.PaginatedList = [];
+ $scope.currentPage = 1;
+$scope.maxSize = 5;
+
+
+
+ $scope.$watch('currentPage + numPerPage', function() {
+    var begin = (($scope.currentPage - 1) * $scope.limit)
+    , end = begin + $scope.limit;
+    
+    $scope.PaginatedList = vm.syncObject.slice(begin, end);
+  });
+
+
+
 
 vm.showData = function(){
   alert(vm.syncObject);
@@ -107,6 +125,7 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
+    'ui.bootstrap',
     'scopeApp',
     'myApp'
     
