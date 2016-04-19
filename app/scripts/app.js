@@ -15,30 +15,54 @@ var vm = this;
  var scopeApp = angular.module('scopeApp', ['firebase']);
 
 /* var fireApp = angular.module('fireApp', ['firebase']);
-
 fireApp.controller('dbController', function($scope, $firebaseObject) {
   var ref = new Firebase("https://popping-inferno-8627.firebaseio.com/data");
-
 var syncObject = $firebaseObject(ref);
-
 syncObject.$bindTo($scope,"data");
-
-
 }); */
 
 scopeApp.controller('scopeController', ['$scope', '$firebaseArray', function ($scope, $firebaseArray) {
     
 var ref = new Firebase("https://popping-inferno-8627.firebaseio.com/");
+var zipRef = new Firebase("https://uszipcodes.firebaseio.com/");
+
+var locationList;
+
+
 var vm = this;
+
+var query = zipRef.orderByChild("state").equalTo("AZ");
+
+$scope.locationArray = $firebaseArray(query);
+
+console.log($scope.locationArray);
+
 vm.syncObject = $firebaseArray(ref);
+
+
+
 vm.Test = "Test"
 
 
-vm.customMarker = "../dist/images/home.png";
 
+var GeoMap = "/images/gz_2010_us_050_00_500k.kml"
+var file = "/scripts/home.png";
+
+console.log(file);
+
+var index = document.getElementById("$index");
+console.log(index);
+
+vm.customMarker = file;
+vm.coolMap = GeoMap;
+
+
+//locationList = vm.zipObject;
 
 vm.syncObject.$loaded().then(function(){
  console.log(vm.syncObject.length); 
+
+
 
 
 
@@ -50,7 +74,7 @@ var pointArray = [];
 var sampleShops;
 sampleShops = $scope.sampleShops;
 
-$scope.limit = 10;
+$scope.limit = 20;
 $scope.searchStates = '';
  $scope.totalItems = vm.syncObject.length;
  $scope.PaginatedList = [];
@@ -125,7 +149,7 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ui.bootstrap',
+ //   'angular-bootstrap',
     'scopeApp',
     'myApp'
     
@@ -146,5 +170,3 @@ angular
         redirectTo: '/'
       });
   });
-
- 

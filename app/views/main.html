@@ -3,7 +3,8 @@
   <body>
  <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{vm.googleMapsUrl}}">
 
-  <ng-map center="35,-115" zoom="4"><marker ng-repeat="p in vm.syncObject"
+  <ng-map center="35,-115" zoom="4">
+  <marker id="$index" ng-repeat="p in vm.syncObject"
   position="{{p.latLongArray}}"
   data="{{syncObject[$index]}}"
   on-click="vm.showData()";
@@ -18,7 +19,7 @@
   <div class="form-group">
     <div class="input-group">
     <div class="input-group-addon"><i class ="fa fa-search"></i></div>
-    <input type="text" class="form-control" placeholder="search for dispensaries" ng-model="searchStates"></input>
+    <input type="text" class="form-control" placeholder="Search both linked databases by store name, address, city or zip." ng-model="searchStates"></input>
     </div>
     </div>
     </form>
@@ -26,7 +27,7 @@
     <tr><th>Name</th><th>Address</th><th>City</th><th>State</th><th>Zip</th><th>Delivery</th><th>Phone</th></tr>
   </thead>
   <tbody>
-  <tr ng-repeat="shop in PaginatedList | orderBy: state | filter: searchStates">
+  <tr ng-repeat="shop in PaginatedList | orderBy: state | filter: searchStates | limitTo: limit ">
   <td>{{shop.name}}</td>
   <td>{{shop.address}}</td>
   <td>{{shop.city}}</td>
@@ -37,12 +38,26 @@
   </tr>
   </tbody>
  </table> 
-     <uib-pagination
+   <!--  <uib-pagination
  ng-model="currentPage"
  total-items="totalItems"
  max-size="maxSize"
  boundary-links="true">
  </uib-pagination>
-
- 
+-->
+ <br>
+  <br>
+<h3>Zip Code and Population</h3>
+  <table class="table table-bordered table-striped" ng-model="searchStates"><thead>
+    <tr><th>City</th><th>State</th><th>Zip</th><th>Population</th></tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="loc in locationArray | orderBy: state | filter: searchStates | limitTo: limit">
+  <td>{{loc.city}}</td>
+  <td>{{loc.state}}</td>
+  <td>{{loc._id}}</td>
+  <td>{{loc.pop}}</td>
+  </tr>
+  </tbody>
+ </table> 
 </div>
