@@ -2,11 +2,10 @@
 
 var googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqRfEpYBjnbhPJ9Bz5lD32LI5gJU0dlLc";
 console.log(googleMapsUrl);
-
+/*
 angular.module('newMapsApp').controller('myController', function(ngMap) {
 
 vm.syncObject.$loaded().then(function(){
-  NgMap.getMap().then(function(map) {
     console.log(map.getCenter());
     console.log('markers', map.markers);
     map.customMarkers.customMarker.setVisible(true);
@@ -19,10 +18,10 @@ google.maps.event.trigger(map, 'resize');
 
 
   });
- });
+ }); 
 
 });
-
+*/
 
 
 

@@ -10,9 +10,9 @@
  */
 var vm = this;
 
- var myApp = angular.module('myApp', ['ngMap']);
+// var myApp = angular.module('myApp', ['ngMap']);
 
- var scopeApp = angular.module('scopeApp', ['firebase']);
+ var scopeApp = angular.module('scopeApp', ['firebase', 'ngMap']);
 
 /* var fireApp = angular.module('fireApp', ['firebase']);
 fireApp.controller('dbController', function($scope, $firebaseObject) {
@@ -21,10 +21,11 @@ var syncObject = $firebaseObject(ref);
 syncObject.$bindTo($scope,"data");
 }); */
 
-scopeApp.controller('scopeController', ['$scope', '$firebaseArray', function ($scope, $firebaseArray) {
+scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseObject', function ($scope, $firebaseArray,$firebaseObject) {
     
 var ref = new Firebase("https://popping-inferno-8627.firebaseio.com/");
 var zipRef = new Firebase("https://uszipcodes.firebaseio.com/");
+
 
 var locationList;
 
@@ -33,7 +34,11 @@ var vm = this;
 
 var query = zipRef.orderByChild("state").equalTo("AZ");
 
+
 $scope.locationArray = $firebaseArray(query);
+
+
+console.log(vm.usaOverlay);
 
 console.log($scope.locationArray);
 
@@ -46,7 +51,7 @@ vm.Test = "Test"
 
 
 var GeoMap = "/images/gz_2010_us_050_00_500k.kml"
-var file = "/scripts/home.png";
+var file = "https://dl.dropboxusercontent.com/s/qa36ucvhcia6wmp/pin.png";
 
 console.log(file);
 
@@ -57,17 +62,13 @@ vm.customMarker = file;
 vm.coolMap = GeoMap;
 
 
-//locationList = vm.zipObject;
-
 vm.syncObject.$loaded().then(function(){
  console.log(vm.syncObject.length); 
+ console.log(vm.syncObject.$id);
 
 
 
-
-
-
-    vm.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqRfEpYBjnbhPJ9Bz5lD32LI5gJU0dlLc";
+vm.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqRfEpYBjnbhPJ9Bz5lD32LI5gJU0dlLc";
 
 var pointArray = [];
 
@@ -140,7 +141,7 @@ console.log($scope.googleMapsUrl);
 
 });
   }]);
-
+var app =
 angular
   .module('newMapsApp', [
     'ngAnimate',
@@ -150,8 +151,8 @@ angular
     'ngSanitize',
     'ngTouch',
  //   'angular-bootstrap',
-    'scopeApp',
-    'myApp'
+    'scopeApp'
+ //   'myApp'
     
   ])
   .config(function ($routeProvider) {
