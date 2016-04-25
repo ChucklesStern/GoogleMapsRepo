@@ -21,7 +21,7 @@ var syncObject = $firebaseObject(ref);
 syncObject.$bindTo($scope,"data");
 }); */
 
-scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseObject', function ($scope, $firebaseArray,$firebaseObject) {
+scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseObject' , 'NgMap' , function ($scope, $firebaseArray,$firebaseObject, NgMap) {
     
 var ref = new Firebase("https://popping-inferno-8627.firebaseio.com/");
 var zipRef = new Firebase("https://uszipcodes.firebaseio.com/");
@@ -39,10 +39,43 @@ $scope.locationArray = $firebaseArray(query);
 
 
 console.log(vm.usaOverlay);
-
 console.log($scope.locationArray);
 
 vm.syncObject = $firebaseArray(ref);
+
+
+ 
+  NgMap.getMap().then(function(map) {
+    vm.map = map;
+  });
+
+
+vm.styleFunction = function(feature){
+  var color = 'gray';
+  if(feature.getProperty('isColorful')) {
+    color = feature.getProperty('color');
+  }
+  return({
+    fillColor: color,
+    strokeColor: color,
+    strokeWeight: 2,
+  });
+}
+
+ vm.onClick= function(event) {
+    event.feature.setProperty('isColorful', true);
+  };
+
+vm.onMouseover = function(event) {
+  vm.map.data.revertStyle();
+  vm.map.data.overrideStyle(event.feature, {strokeWeight: 8});
+}
+
+vm.onMouseout = function(event){
+  vm.map.data.revertStyle();
+}; 
+
+
 
 
 
