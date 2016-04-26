@@ -1,6 +1,7 @@
 <div class="container" ng-app="app" ng-controller="scopeController as vm" >
   <h1>Map{{p.latLongArray}}</h1>
   <body>
+  <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqRfEpYBjnbhPJ9Bz5lD32LI5gJU0dlLc">
   <ng-map center="35,-115" zoom="6" class="mapcontainer">
   <map-data set-style="vm.styleFunction"
         on-click="vm.onClick()"
@@ -15,6 +16,7 @@
   {{p.latLongArray}}"
   ></marker>
   </ng-map>
+  </div>
   <br>
   <br>
   
