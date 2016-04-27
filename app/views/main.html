@@ -11,9 +11,11 @@
   icon="{{vm.customMarker}}"
   position="{{p.latLongArray}}"
   data="{{syncObject[$index]}}"
-  on-click="vm.showData()";
+  on-click="vm.showData({{p.latLongArray}})"
   title="{{p.name}}
-  {{p.latLongArray}}"
+  {{p.address}}
+  {{p.city}} {{p.state}}
+  {{p.Mobile}}"
   ></marker>
   </ng-map>
   </div>

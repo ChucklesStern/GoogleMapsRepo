@@ -22,15 +22,20 @@ syncObject.$bindTo($scope,"data");
 }); */
 
 scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseObject' , 'NgMap' , function ($scope, $firebaseArray,$firebaseObject, NgMap) {
-    
+ var vm = this;   
 var ref = new Firebase("https://popping-inferno-8627.firebaseio.com/");
 var zipRef = new Firebase("https://uszipcodes.firebaseio.com/");
+
+ 
+NgMap.getMap().then(function(map) {
+    vm.map = map;
+   console.log('markers', vm.map.markers);
 
 
 var locationList;
 
 
-var vm = this;
+
 
 var query = zipRef.orderByChild("state").equalTo("AZ");
 
@@ -44,10 +49,6 @@ console.log($scope.locationArray);
 vm.syncObject = $firebaseArray(ref);
 
 
- 
-  NgMap.getMap().then(function(map) {
-    vm.map = map;
-  });
 
 
 vm.styleFunction = function(feature){
@@ -127,9 +128,18 @@ $scope.maxSize = 5;
 
 
 
-vm.showData = function(){
-  alert(vm.syncObject);
-  console.log(vm.syncObject);
+vm.showData = function(id){
+ for (var i = 0; i < vm.syncObject.length; i++){
+  if (this.id == vm.syncObject[i].$id){
+    alert(vm.syncObject[i].name + ", " + vm.syncObject[i].Mobile + ", " + vm.syncObject[i].city);
+  console.log(vm.syncObject[i]);
+  console.log("Id's synced!");
+  } else{
+    console.log("Id's not synced")
+    console.log(this.id);
+    console.log(vm.syncObject[i].$id);
+  } 
+}
 }
 
 var markerArray =[];
@@ -167,10 +177,11 @@ $scope.markerArray = markerArray;
 
 console.log($scope.googleMapsUrl);
  console.log(vm.syncObject);
+  console.log(vm.syncObject[0].$id);
   console.log(latLongArray);
   console.log(markerArray)  
 
-
+ });
 
 });
   }]);
