@@ -7,7 +7,7 @@
         on-click="vm.onClick()"
         on-mouseover="vm.onMouseover()"
         on-mouseout="vm.onMouseout()" load-geo-json="https://dl.dropboxusercontent.com/s/qjes2jckauj00l5/map.geojson"></map-data>
-  <marker id="{{p.$id}}" ng-repeat="p in vm.syncObject"
+  <marker id="{{p.$id}}" ng-repeat="p in vm.mapInfo"
   icon="{{vm.customMarker}}"
   position="{{p.latLongArray}}"
   data="{{syncObject[$index]}}"
