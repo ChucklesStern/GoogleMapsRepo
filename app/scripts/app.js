@@ -21,7 +21,7 @@ var syncObject = $firebaseObject(ref);
 syncObject.$bindTo($scope,"data");
 }); */
 
-scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseObject', 'NgMap', '$timeout', function($scope, $firebaseArray, $firebaseObject, NgMap, $timeout) {
+scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseObject', 'NgMap', '$timeout', function($scope, $firebaseArray, $firebaseObject, NgMap, $timeout, $uibModal) {
     var vm = this;
     var ref = new Firebase("https://popping-inferno-8627.firebaseio.com/");
     var zipRef = new Firebase("https://uszipcodes.firebaseio.com/");
@@ -30,7 +30,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
     NgMap.getMap().then(function(map) {
         vm.map = map;
-        console.log('markers', vm.map.markers);
+        console.log('markers', map.markers);
 
 
         var locationList;
@@ -40,6 +40,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
         vm.stateQuery = $firebaseArray(stateRef);
         vm.stateOption;
         vm.chosenState;
+        var syncObject = [];
 
         vm.selectState = function(state) {
             vm.chosenState = state;
@@ -80,7 +81,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
                         if (syncObject[i].zip == locationArray[j]._id) {
                             syncObject[i].pop = locationArray[j].pop
                             console.log("Match! Pop should be amended");
-                            console.log(syncObject);
+                            console.log(syncObject[i]);
                         }
                     }
                 }
@@ -120,7 +121,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
                 var preSyncObject = ref.orderByChild("state").equalTo(fullObj);
 
-                var syncObject = [];
+                
                 vm.syncObject2 = $firebaseArray(preSyncObject);
 
                 vm.syncObject2.$loaded().then(function() {
@@ -137,6 +138,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
             }
             getLocation(stateObj);
+
             $scope.locationArray2.$loaded().then(function(syncObject, locationArray) {
                 return $timeout(function(syncObject, locationArray) {
                   var syncObject = [];
@@ -154,7 +156,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
                       console.log(locationArray);
                 console.log(syncObject);
                     addPop(syncObject, locationArray)
-                }, 1000);
+                }, 100);
             })
         }
         vm.styleFunction = function(feature) {
@@ -171,16 +173,17 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
         vm.onClick = function(event) {
             event.feature.setProperty('isColorful', true);
+
         };
 
         vm.onMouseover = function(event) {
-            vm.map.data.revertStyle();
-            vm.map.data.overrideStyle(event.feature, { strokeWeight: 8 });
-            vm.map.data.overrideStyle(event.feature, { 'isColorful': false })
+            map.data.revertStyle();
+            map.data.overrideStyle(event.feature, { strokeWeight: 8 });
+            map.data.overrideStyle(event.feature, { 'isColorful': false })
         }
 
         vm.onMouseout = function(event) {
-            vm.map.data.revertStyle();
+            map.data.revertStyle();
         };
 
 
@@ -250,10 +253,17 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
             // shops[i].latLongArray = markerArray[i];
             console.log("shops");
             console.log(shops);
+            console.log(shops[0]);
+            vm.mapInfo = [];
+            for (var shop in shops){
+                vm.mapInfo.push(shops[shop]);
+            }
+             console.log(vm.mapInfo);
+            console.log(vm.mapInfo[0]);
             $scope.markerArray = markerArray;
-            vm.mapInfo = shops;
-            console.log(vm.mapInfo);
-                google.maps.event.trigger(vm.map, 'resize');
+            
+ 
+      
 
             var unattached = function() {
                 vm.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCqRfEpYBjnbhPJ9Bz5lD32LI5gJU0dlLc";
@@ -281,49 +291,60 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
             };
             unattached();
-          google.maps.event.trigger(vm.map, 'resize');
+      
         };
 
         //Need to fix this function as well as map update/ 4/28 
         vm.selectPop = function(option) {
+            vm.mapInfo = $scope.PaginatedList;
             vm.testArray = [];
-
             console.log("selected Pop");
             console.log(option);
             console.log("testArray");
             console.log(vm.testArray);
-            console.log("syncObject before");
-            console.log(vm.syncObject.length);
-            for (var i = 0; i < vm.syncObject.length; i++) {
+            console.log("mapInfo before");
+            console.log(vm.mapInfo.length);
+            for (var store in vm.mapInfo) {
                 //  var item = vm.syncObject[i];
-                if (vm.syncObject[i].pop < option) {
-                    vm.syncObject.splice(i, 1);
-                    console.log(vm.syncObject[i]);
+                if (vm.mapInfo[store].pop >= option) {
+                   vm.testArray.push(vm.mapInfo[store]);
+                   console.log(vm.mapInfo[store]);
                     //   vm.testArray.push(vm.syncObject[i]);
                 }
 
             }
+            vm.mapInfo = [];
+            for(var store in vm.testArray){
+                vm.mapInfo.push(vm.testArray[store]);
+            }
             console.log("syncObject After");
-            console.log(vm.syncObject.length);
-            google.maps.event.trigger(vm.map, 'resize');
+            console.log(syncObject.length);
+            console.log("vm.mapInfo After");
+            console.log(vm.mapInfo);
+            console.log(vm.mapInfo.length);
+
+
         }
 
 
 
 
 
-        vm.showData = function(id) {
-            for (var i = 0; i < vm.syncObject.length; i++) {
-                if (this.id == vm.syncObject[i].$id) {
-                    alert(vm.syncObject[i].name + ", " + vm.syncObject[i].Mobile + ", " + vm.syncObject[i].city);
-                    console.log(vm.syncObject[i]);
+        vm.showData = function(id, $uibModal) {
+     
+            for (var i = 0; i < vm.mapInfo.length; i++) {
+                if (this.id == vm.mapInfo[i].$id) {
+                    alert(vm.mapInfo[i].name + ", " + vm.mapInfo[i].Mobile + ", " + vm.mapInfo[i].city);
+                    console.log(vm.mapInfo[i]);
                     console.log("Id's synced!");
+    
                 } else {
                     console.log("Id's not synced")
                     console.log(this.id);
-                    console.log(vm.syncObject[i].$id);
+                    console.log(vm.mapInfo[i].$id);
                 }
             }
+
         };
 
 
