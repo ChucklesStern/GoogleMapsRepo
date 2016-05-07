@@ -330,8 +330,16 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
 
 
-        vm.showData = function(id, $uibModal) {
-     
+        vm.showData = function(p) {
+            console.log(p);
+        vm.map.panTo(p.getPosition());
+   var infowindow = new google.maps.InfoWindow({})     
+        infowindow.setContent(p);
+        infowindow.open(vm.map,p)
+
+
+
+     /*
             for (var i = 0; i < vm.mapInfo.length; i++) {
                 if (this.id == vm.mapInfo[i].$id) {
                     alert(vm.mapInfo[i].name + ", " + vm.mapInfo[i].Mobile + ", " + vm.mapInfo[i].city);
@@ -344,7 +352,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
                     console.log(vm.mapInfo[i].$id);
                 }
             }
-
+*/
         };
 
 
