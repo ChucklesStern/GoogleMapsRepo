@@ -30,6 +30,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
     NgMap.getMap().then(function(map) {
         vm.map = map;
+
         console.log('markers', map.markers);
 
 
@@ -257,12 +258,28 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
             vm.mapInfo = [];
             for (var shop in shops){
                 vm.mapInfo.push(shops[shop]);
+                var latlng = new google.maps.LatLng(shops[shop].latLongArray[0], shops[shop].latLongArray[1])
+                    var marker = new Marker({
+    position: latlng,
+    map: vm.map,
+    title: shops[shop].name,
+    animation: google.maps.Animation.DROP,
+    icon: {
+            path: SQUARE_PIN,
+        fillColor: '#00CCBB',
+        fillOpacity: 1,
+        strokeColor: '',
+        strokeWeight: 0
+
+    },
+    map_icon_label: '<span class="map-icon map-icon-convenience-store"></span>'
+  });
             }
              console.log(vm.mapInfo);
             console.log(vm.mapInfo[0]);
             $scope.markerArray = markerArray;
             
- 
+         
       
 
             var unattached = function() {
@@ -332,19 +349,25 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
         vm.showData = function(p) {
             console.log(p);
-        vm.map.panTo(p.getPosition());
-   var infowindow = new google.maps.InfoWindow({})     
-        infowindow.setContent(p);
-        infowindow.open(vm.map,p)
+    
 
 
 
-     /*
+     
             for (var i = 0; i < vm.mapInfo.length; i++) {
                 if (this.id == vm.mapInfo[i].$id) {
-                    alert(vm.mapInfo[i].name + ", " + vm.mapInfo[i].Mobile + ", " + vm.mapInfo[i].city);
-                    console.log(vm.mapInfo[i]);
+                   // alert(vm.mapInfo[i].name + ", " + vm.mapInfo[i].Mobile + ", " + vm.mapInfo[i].city);
+                    var p = vm.mapInfo[i];
+                    console.log(p);
                     console.log("Id's synced!");
+                    var latlng = new google.maps.LatLng(p.latLongArray[0], p.latLongArray[1])
+                    console.log("latlong")
+                    console.log(latlng);
+                   
+                        vm.map.panTo(latlng);
+   var infowindow = new google.maps.InfoWindow({})     
+        infowindow.setContent(p.name, p.address, p.city, p.state);
+        infowindow.open(vm.map,marker)
     
                 } else {
                     console.log("Id's not synced")
@@ -352,7 +375,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
                     console.log(vm.mapInfo[i].$id);
                 }
             }
-*/
+
         };
 
 
