@@ -31,9 +31,10 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
     NgMap.getMap().then(function(map) {
         vm.map = map;
 
-        console.log('markers', map.markers);
+        console.log('markers', vm.map.markers);
 
 
+    });
         var locationList;
 
 
@@ -45,13 +46,17 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
         vm.selectState = function(state) {
             vm.chosenState = state;
+            console.log(vm.chosenState);
         };
 
-        console.log(vm.chosenState);
+        
 
 
 
         vm.lookState = function(urState) {
+           
+        
+
             console.log(urState);
             console.log("lookState executed!");
             var stateObj = urState;
@@ -157,7 +162,7 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
                       console.log(locationArray);
                 console.log(syncObject);
                     addPop(syncObject, locationArray)
-                }, 100);
+                }, 3000);
             })
         }
         vm.styleFunction = function(feature) {
@@ -178,13 +183,13 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
         };
 
         vm.onMouseover = function(event) {
-            map.data.revertStyle();
-            map.data.overrideStyle(event.feature, { strokeWeight: 8 });
-            map.data.overrideStyle(event.feature, { 'isColorful': false })
+            vm.map.data.revertStyle();
+            vm.map.data.overrideStyle(event.feature, { strokeWeight: 8 });
+           vm.map.data.overrideStyle(event.feature, { 'isColorful': false })
         }
 
         vm.onMouseout = function(event) {
-            map.data.revertStyle();
+            vm.map.data.revertStyle();
         };
 
 
@@ -217,11 +222,13 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
 
 
         var assignMapCoords = function(syncObject) {
-
-            var markerArray = [];
+          
+     var markerArray = [];
             var latLongArray = [];
             $scope.markerArray = markerArray;
             var shops;
+            console.log("syncObject")
+            console.log(syncObject);
             shops = syncObject;
 
             for (var i = 0; i < shops.length; i++) {
@@ -256,6 +263,8 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
             console.log(shops);
             console.log(shops[0]);
             vm.mapInfo = [];
+            var markerArray2 = [];
+            var markerCluster;
             for (var shop in shops){
                 vm.mapInfo.push(shops[shop]);
                 var latlng = new google.maps.LatLng(shops[shop].latLongArray[0], shops[shop].latLongArray[1])
@@ -274,7 +283,21 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
     },
     map_icon_label: '<span class="map-icon map-icon-convenience-store"></span>'
   });
+                    markerArray2.push(marker);
+                    
             }
+              if (markerCluster != null) {
+                console.log(markerCluster);
+              markerCluster = new MarkerClusterer(vm.map, null)
+            } else {
+                google.maps.event.trigger(vm.map, 'resize');
+                for (var shops in markerArray2){
+                    marker.setMap(null);
+                    vm.map.marker = null;
+                }
+                markerCluster = new MarkerClusterer(vm.map, markerArray2);
+            }
+          //  var markerCluster = new MarkerClusterer(vm.map, markerArray2)
              console.log(vm.mapInfo);
             console.log(vm.mapInfo[0]);
             $scope.markerArray = markerArray;
@@ -377,10 +400,8 @@ scopeApp.controller('scopeController', ['$scope', '$firebaseArray', '$firebaseOb
             }
 
         };
+//put vm.map }); here
 
-
-
-    });
 }]);
 
 var app =
