@@ -27,7 +27,7 @@
       <option value="">---Please select---</option> <!-- not selected / blank option -->
      <option ng-repeat="state in vm.stateQuery" value="{{state.abbreviatedName}}">{{state.fullName}}</option> <!-- interpolation -->
   </select><br>
-    <button ng-model="vm.stateOption" ng-click="vm.lookState(vm.stateOption)">Confirm selection</button><br>
+    <button ng-model="vm.stateOption" ng-click="vm.checker(vm.stateOption)">Confirm selection</button><br>
     </div>
  <br>
  <br>
